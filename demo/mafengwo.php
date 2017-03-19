@@ -9,7 +9,7 @@ $configs = array(
     'name' => '马蜂窝',
     'tasknum' => 1,
     //'save_running_state' => true,
-    'log_show' => false,
+    'log_show' => true,
     'domains' => array(
         'www.mafengwo.cn'
     ),

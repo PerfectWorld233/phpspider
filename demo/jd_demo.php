@@ -37,7 +37,7 @@ $configs = array(
     'name' => 'JD.com',
     'tasknum' => 1,
     'save_running_state' => false,
-    //'log_show' => true,
+    'log_show' => false,
     'domains' => array(
         'list.jd.com',
         'item.jd.com',

@@ -5,6 +5,26 @@ require dirname(__FILE__).'/../core/init.php';
 /* Do NOT delete this comment */
 /* 不要删除这段注释 */
 
+$sql = "CREATE TABLE `jd_goods` (
+  `goods_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '货品ID',
+  `goods_name` varchar(255) NOT NULL DEFAULT '' COMMENT '货品名称',
+  `goods_url` varchar(255) NOT NULL DEFAULT '' COMMENT '货品的url',
+  `goods_price` decimal(10,2) NOT NULL COMMENT '货品的价格',
+  `goods_quan` varchar(255) NOT NULL DEFAULT '' COMMENT '货品的优惠信息',
+  `comment-count` varchar(10) NOT NULL DEFAULT '' COMMENT '货品的评价总数',
+  `goods_rate` varchar(10) NOT NULL DEFAULT '' COMMENT '货品的好评率',
+  `category` varchar(255) NOT NULL DEFAULT '' COMMENT '商品分类url',
+  `category_url` varchar(255) NOT NULL DEFAULT '' COMMENT '商品分类名称',
+  `brand` varchar(255) NOT NULL DEFAULT '' COMMENT '商品品牌url',
+  `brand_url` varchar(255) NOT NULL DEFAULT '' COMMENT '商品品牌名称',
+  `shop_url` varchar(255) NOT NULL DEFAULT '' COMMENT '商品店铺url',
+  `shop_name` varchar(255) NOT NULL DEFAULT '' COMMENT '商品店铺名称',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '抓取时间',
+  `update_user` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户id',
+  PRIMARY KEY (`goods_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='京东商品表'";
+
+mysql_query($sql);
 
 // 测试页面元素抽取
 //$html = requests::get("http://item.jd.com/10393080524.html");

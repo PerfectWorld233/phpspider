@@ -33,14 +33,47 @@ require dirname(__FILE__).'/../core/init.php';
 //$result['company'] = selector::select($html, "div","css");
 //$result['code'] = selector::remove($result['company'], "a", "css");
 
+requests::set_useragents(array(
+    "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
 
-$url = 'http://guba.eastmoney.com/list,of519935.html';
+));
+
+//requests::set_referer("http://guba.eastmoney.com");requests::set_useragents(array(
+//    "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
+//    //   "Opera/9.80 (Android 3.2.1; Linux; Opera Tablet/ADR-1109081720; U; ja) Presto/2.8.149 Version/11.10",
+//    //   "Mozilla/5.0 (Android; Linux armv7l; rv:9.0) Gecko/20111216 Firefox/9.0 Fennec/9.0"
+//));
+
+
+//列表页
+$list_url = 'http://guba.eastmoney.com/type,zg80000243_1.html';
+$list_html = requests::get($list_url);
+$read_num = selector::select($list_html, "//div[contains(@id,'articleh')]//span[contains(@class,'11')]");
+$cmt_num = selector::select($list_html, "//div[contains(@id,'articleh')]//span[contains(@class,'12')]");
+$publish_time = selector::select($list_html, "//div[contains(@id,'articleh')]//span[contains(@class,'16')]");
+$update_time =  selector::select($list_html, "//div[contains(@id,'articleh')]//span[contains(@class,'15')]");
+echo $read_num;die;
+
+//详情页
+/*$url = 'http://guba.eastmoney.com/news,519983,637658578.html';
 $html = requests::get($url);
 
 $stock_name = selector::select($html, "//span[contains(@id,'stockname')]//a");
-$stock_code = selector::select($html, "//span[contains(@id, 'stockheadercode')]//a");
-echo $stock_code;
-die;
+$stock_code = selector::select($html, "#var OuterCode = \"(.*)\"#", "regex");           //   zwcontentmain
+$title      = selector::select($html, "//div[contains(@class,'zwcontentmain')]//div[contains(@id, 'zwconttbt')]"); //标题
+$comment      = selector::select($html, "//div[contains(@class,'zwlitext stockcodec')]");           //评论
+print_r($title);
+die;*/
+
+
+
+
+
+
+$url='http://guba.eastmoney.com/'.$keyword.',f_'.$i.'.html';
+$arr_data = selector::select($html, "//div[contains(@id,'articlelistnew')]//div[contains(@class,'article')]");
+$html =  selector::select($html, "//div[contains(@id,'articlelistnew')]//div[contains(@class,'pager')]");
+
 
 ini_set("memory_limit", "1024M");
 require dirname(__FILE__).'/../core/init.php';

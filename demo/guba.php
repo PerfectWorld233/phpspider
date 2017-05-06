@@ -8,30 +8,39 @@
  */
 
 
-//ini_set("memory_limit", "1024M");
-//require dirname(__FILE__).'/../core/init.php';
-//
-///* Do NOT delete this comment */
-///* 不要删除这段注释 */
-//
-////  股吧入口
+ini_set("memory_limit", "1024M");
+require dirname(__FILE__).'/../core/init.php';
+
+/* Do NOT delete this comment */
+/* 不要删除这段注释 */
+
+//  股吧入口
 //$url = 'http://fund.eastmoney.com/company/80000243.html';
 //$html = requests::get($url);
-//$result['company_code'] ='80000243';
-//$result['company_name']= '长信基金';
-//$result['company'] = selector::select($html, "td.txt_left","css");
-//$result['code'] = selector::remove($result['company'], "a", "css");
-////print_r($result['company']);die;
-//
-//
-////长信创新驱动股票吧
-////http://guba.eastmoney.com/list,of519935.html
-//
-//// 获取详情页链接
+//$company_code='80000243';
+//$company_name= '长信基金';
+//$company = selector::select($html, "td.txt_left","css");
+//$code = selector::remove($result['company'], "a", "css");
+//print_r($result['company']);die;
+
+
+//长信创新驱动股票吧
+//http://guba.eastmoney.com/list,of519935.html
+
+// 获取详情页链接
 //$url = 'http://guba.eastmoney.com/list,of519935.html';
 //$html = requests::get($url);
 //$result['company'] = selector::select($html, "div","css");
 //$result['code'] = selector::remove($result['company'], "a", "css");
+
+
+$url = 'http://guba.eastmoney.com/list,of519935.html';
+$html = requests::get($url);
+
+$stock_name = selector::select($html, "//span[contains(@id,'stockname')]//a");
+$stock_code = selector::select($html, "//span[contains(@id, 'stockheadercode')]//a");
+echo $stock_code;
+die;
 
 ini_set("memory_limit", "1024M");
 require dirname(__FILE__).'/../core/init.php';

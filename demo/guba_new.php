@@ -16,6 +16,8 @@
   `publish_time` varchar(255) NOT NULL,
   `update_time` varchar(255) NOT NULL,
   `author` varchar(255) NOT NULL,
+  `influence` text NOT NULL,
+  `bar_age` text NOT NULL,
   `stock_name` varchar(255) NOT NULL,
   `stock_code` varchar(32) NOT NULL,
   `comment` text NOT NULL,
@@ -40,7 +42,7 @@ db::reset_connect(
 );
 $company_name = '长信基金';
 $company_code ='80000243';
-$end_time = '2014-10-1 00:00:00';               // 2014-10-1 之前的不抓取
+$end_time = '2014-01-01 00:00:00';               // 2014-10-1 之前的不抓取
 $logfile = '../data/'.$company_code.'_'.date('md').'.log';
 
 $list_url = 'http://guba.eastmoney.com/type,zg80000243_1.html';
@@ -76,12 +78,18 @@ for($ll =1; $ll <= $sum_page; $ll ++)
             $author =  selector::select($list_vv, "span.l4",'css');
             $pattern = '@<a .*? data-popper="(.*?)" .*?>(.*?)</a>@';
             $arr_author =  selector::select($author, $pattern,"regex");
-            if ( $arr_author)
-            {
-                $author_uid =$arr_author[0];
-                $author= $author_uid.'|'.$arr_author[1];
-            }
-            $update_time = selector::select($list_vv, "span.l5",'css');
+
+            $author_uid =$arr_author[0];
+            $author= $author_uid.'|'.$arr_author[1];
+
+            $author_url = 'http://iguba.eastmoney.com/'.$author_uid;
+            $author_html = requests::get($author_url);
+            usleep(rand(30, 100));
+            preg_match_all('/data-influence="(.*)">/siU', $author_html, $inf_vv);
+            $influence = $inf_vv[1][0];                                     //  影响力
+            preg_match_all('/data-influence.*<span>(.*)<\/span>/siU', $author_html, $age_vv);
+            $bar_age = $age_vv[1][0];                                       // 吧龄
+            $update_time = selector::select($list_vv, "span.l5",'css');     //更新时间
 
             //详情页
             $url = 'http://guba.eastmoney.com/'.$link;
@@ -107,6 +115,8 @@ for($ll =1; $ll <= $sum_page; $ll ++)
                 'publish_time' => $publish_time,
                 'update_time' => $update_time,
                 'author' => $author,
+                'influence' => $influence,
+                'bar_age' => $bar_age,
                 'stock_name' => $stock_name,
                 'stock_code' => $stock_code,
                 'comment' => $comment,
@@ -114,7 +124,6 @@ for($ll =1; $ll <= $sum_page; $ll ++)
                 'comment_num' => $comment_num,
             );
             $res = db::insert('guba', $data);
-            error_log('database_error' . mysqli_error(), 3, $logfile);
         }
 
     }

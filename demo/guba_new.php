@@ -23,14 +23,13 @@
   `comment` text NOT NULL,
   `view_num` int(10) NOT NULL,
   `comment_num` int(10) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `link` (`link`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='股吧';
 
 */
 ini_set("memory_limit", "1024M");
 require dirname(__FILE__).'/../core/init.php';
-error_reporting(0);
+
 db::reset_connect(
     array(
         'host'  => 'localhost',
@@ -52,7 +51,8 @@ $list_html = requests::get($list_url);
 $sum_page = preg_match_all('/<div class="pager">(.*)<span/siU', $list_html, $pp);
 $sum_page = preg_match_all('/(\d)+?/siU', $pp[1][0], $pp_vv);
 $sum_page = ceil(intval($pp_vv[0][0])/80);
-for($ll =1; $ll <= $sum_page; $ll ++)
+
+for($ll =4; $ll <= $sum_page; $ll ++)
 {
     $list_url = 'http://guba.eastmoney.com/type,zg80000243_'.$ll.'.html';
     $list_html = requests::get($list_url);
@@ -84,7 +84,7 @@ for($ll =1; $ll <= $sum_page; $ll ++)
 
             $author_url = 'http://iguba.eastmoney.com/'.$author_uid;
             $author_html = requests::get($author_url);
-            usleep(rand(30, 100));
+            usleep(rand(10, 100));
             preg_match_all('/data-influence="(.*)">/siU', $author_html, $inf_vv);
             $influence = $inf_vv[1][0];                                     //  影响力
             preg_match_all('/data-influence.*<span>(.*)<\/span>/siU', $author_html, $age_vv);
@@ -94,11 +94,11 @@ for($ll =1; $ll <= $sum_page; $ll ++)
             //详情页
             $url = 'http://guba.eastmoney.com/'.$link;
             $html = requests::get($url);
-            usleep(rand(30, 500));
+            usleep(rand(10, 100));
             $publish_time_tmp = selector::select($html, "//div[contains(@class, 'zwfbtime')]");
             preg_match_all('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/',$publish_time_tmp, $publish_time_vv);
             $publish_time = $publish_time_vv[0][0];
-            if(strtotime($publish_time) < strtotime($end_time))
+            if(!empty($publish_time)&&(strtotime($publish_time) < strtotime($end_time)))
             {
                 break 2;
             }
